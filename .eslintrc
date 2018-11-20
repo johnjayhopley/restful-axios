@@ -1,0 +1,17 @@
+{
+  "extends": ["airbnb"],
+  "plugins": [
+    "react"
+  ],
+  "globals": {
+    "window": true,
+    "document": true
+  },
+  "rules": {
+    "import/extensions": [".js", ".jsx"],
+    "padded-blocks": [0, "never"],
+    "import/prefer-default-export": "off",
+    "no-new": "off",
+    "no-underscore-dangle": "off"
+  }
+}
