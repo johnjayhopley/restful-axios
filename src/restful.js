@@ -1,6 +1,6 @@
 /**
  * Restful
- * @version 1.0.0
+ * @version 1.1.1
  * @dependacies
  *   - axios
  *   - @jhopley/funkit/src/object/assignDeep
@@ -127,21 +127,51 @@ export default class Restful {
   }
 
   /**
-   * @param {Object} model
+   * @param {Object|Array} model
    * @return {Void}
    * @description
-   *  - Creates model namespace in this.api.
+   *  - Creates model namespace git branch this.api.
    *  - Iterates through model enpoints and appends
    *    them into the a model namespace and attaches the
    *    request method to each accordingly.
+   *    An array of model structures can be passed through
+   *    from 1.1.0 and onwards.
    */
   addModel(model) {
+    if (typeof model !== 'object' && !Array.isArray(model)) {
+      throw new Error(`
+        Model object has not been provided. You can pass through an 
+        array of model objects of a singular model object.
+      `);
+    }
+
+    if (Array.isArray(model)) {
+      model.forEach((item) => {
+        this.populateApi(item);
+      });
+
+      return;
+    }
+
+    this.populateApi(model);
+  }
+
+  /**
+   * @param {Object} model
+   * @return {Void}
+   * @description
+   * Populates the model endpoints in the api object.
+   */
+  populateApi(model) {
     if (typeof model !== 'object') {
       throw new Error('Model object has not been provided');
     }
 
     if (!Object.prototype.hasOwnProperty.call(model, 'name')) {
-      throw new Error('Model name missing, you will have to provide a model namespace to include your endpoints.');
+      throw new Error(`
+        Model name missing, you will have to provide a 
+        model namespace to include your endpoints.
+      `);
     }
 
     this.api[model.name] = {};
